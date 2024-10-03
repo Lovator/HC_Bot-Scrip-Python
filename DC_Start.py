@@ -7,15 +7,15 @@ import pyautogui
 import random
 import os
 
+next_floor_counter = 0
+journey_counter = 0
+key_journeys = 4
+food_journeys = True
+
 def set_console_size():
     os.system('mode con: cols=50 lines=8')
     time.sleep(5)
 set_console_size()
-
-next_floor_counter = 0
-journey_counter = 0
-key_journeys = 4
-food_journeys = True  # Переключатель для клика по food_journeys
 
 def random_delay():
     delay = random.uniform(1, 2)
@@ -218,26 +218,21 @@ def press_dangerous_game(window):
     dc_point_map(window)
 
 def press_camp(window):
-    # Пытаемся найти фрагмент dead_warrior.png
     screenshot = capture_screen(window)
     dead_warrior_rectangles = find_and_process_matches(screenshot, "dead_warrior.png")
     
     if len(dead_warrior_rectangles) > 0:
         print("Найден фрагмент dead_warrior.png. Выполняем соответствующие клики.")
-        # Кликаем по координатам для случая, когда найден dead_warrior
         click_coordinates([377, 141, 222, 140], "dc_bt_02")
     else:
         print("Фрагмент dead_warrior.png не найден. Выполняем клики для обычного случая.")
-        # Кликаем по координатам для случая, когда dead_warrior не найден
         click_coordinates([644, 141, 222, 140], "dc_bt_claim_reward")
     
-    # Общие клики для обоих случаев
     click_coordinates([710, 473, 174, 66], "dc_bt_finish_selection_1")
     click_coordinates([341, 371, 121, 62], "dc_bt_finish_selection_2")
     click_coordinates([408, 510, 155, 62], "dc_bt_closed")
     time.sleep(1)
 
-    # Возврат к карте
     dc_point_map(window)
 
 def press_altar_of_blood(window):

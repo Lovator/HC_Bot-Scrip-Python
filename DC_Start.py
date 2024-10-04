@@ -1,3 +1,4 @@
+
 import cv2
 import mss
 import numpy as np
@@ -64,11 +65,11 @@ def find_and_process_matches(screenshot, template):
 
     return rectangles
 
-def save_result_image(screenshot, rectangles):
-    if len(rectangles) > 0:
-        for rect in rectangles:
-            x, y, w, h = rect
-            cv2.rectangle(screenshot, (x, y), (x + w, y + h), (0, 255, 0), 2)
+#def save_result_image(screenshot, rectangles):
+#    if len(rectangles) > 0:
+#        for rect in rectangles:
+#            x, y, w, h = rect
+#            cv2.rectangle(screenshot, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
 def click_coordinates(coordinates, name):
     x, y, width, height = coordinates
@@ -111,8 +112,8 @@ def dc_point_map(window):
         if len(rectangles) > 0:
             fragment_found = True
             print(f"Найдена локация: {readable_name}")
-            save_result_image(screenshot, rectangles)
-            cv2.imwrite("rez_map.png", screenshot)
+#            save_result_image(screenshot, rectangles)
+#            cv2.imwrite("rez_map.png", screenshot)
             
             for rect in rectangles:
                 rect[1] -= 20
@@ -129,8 +130,8 @@ def dc_point_map(window):
             dc_point_map(window)
         elif next_floor_counter == 3:
             click_coordinates([782, 528, 167, 61], "end_journey")
-            click_coordinates([338, 368, 128, 65], "dc_complete_selection")
-            time.sleep(3)
+            time.sleep(1)
+            click_coordinates([529, 520, 151, 65], "dc_home")
             click_coordinates([529, 520, 151, 65], "dc_home")
             time.sleep(10)
             next_floor_counter = 0
@@ -145,9 +146,9 @@ def dc_point_start(window):
     count_no_warrior = len(rectangles)
     print(f"Отсуствие бойцов: {count_no_warrior}")
 
-    save_result_image(screenshot, rectangles)
-    cv2.imwrite("rez_no_war.png", screenshot)
-    print("Сохранено изображение: rez_no_war.png")
+#    save_result_image(screenshot, rectangles)
+#    cv2.imwrite("rez_no_war.png", screenshot)
+#    print("Сохранено изображение: rez_no_war.png")
 
     if count_no_warrior == 0:
         click_coordinates([552, 493, 145, 66], "dc_bt_quick_attack")
@@ -162,7 +163,8 @@ def dc_point_start(window):
         click_coordinates([913, 435, 47, 85], "dc_bt_win_map")
         click_coordinates([782, 528, 167, 61], "dc_bt_end_journey")
         click_coordinates([338, 368, 128, 65], "dc_bt_end_journey_yes")
-        time.sleep(3)
+        time.sleep(1)
+        click_coordinates([529, 520, 151, 65], "dc_home")
         click_coordinates([529, 520, 151, 65], "dc_home")
         time.sleep(8)
         dc_start_journey(window)
@@ -222,10 +224,10 @@ def press_camp(window):
     dead_warrior_rectangles = find_and_process_matches(screenshot, "dead_warrior.png")
     
     if len(dead_warrior_rectangles) > 0:
-        print("Найден фрагмент dead_warrior.png. Выполняем соответствующие клики.")
+        print("Найден фрагмент dead_warrior.png.")
         click_coordinates([377, 141, 222, 140], "dc_bt_02")
     else:
-        print("Фрагмент dead_warrior.png не найден. Выполняем клики для обычного случая.")
+        print("Фрагмент dead_warrior.png не найден.")
         click_coordinates([644, 141, 222, 140], "dc_bt_claim_reward")
     
     click_coordinates([710, 473, 174, 66], "dc_bt_finish_selection_1")
@@ -277,7 +279,6 @@ def dc_start_journey(window):
         dc_point_map(window)
     else:
         print("Достигнуто максимальное количество путешествий.")
-
 
 if __name__ == "__main__":
     window = activate_and_resize_window()
